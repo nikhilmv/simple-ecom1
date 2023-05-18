@@ -23,6 +23,11 @@ php artisan key:generate
 php artisan migrate
 ```
 
+#### -run seeder
+```
+ php artisan db:seed --class="CategorySeeder"
+```
+
 #### -run 
 ```
 php artisan serve
