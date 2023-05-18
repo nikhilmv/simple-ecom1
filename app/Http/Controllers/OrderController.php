@@ -77,22 +77,36 @@ class OrderController extends Controller
     }
     public function store(OrderRequest $request)
     {
-
+       
     // DB::beginTransaction();
     // try {
 
         $request_data=[];
         $request_data['customer_name']=$request->customer_name;
         $request_data['phone_no']=$request->phone_no;
-        $request_data['product_id'] =$request->product_id;
-        $request_data['quantity'] =$request->quantity;
+ 
+        
+        foreach ($request->product_id as $key=>$product_id) { 
+            $getProductName = Product::where('id',$product_id)->select('product_name','price')->first(); 
+            $price = $getProductName->price;
+            $totalPrice =   $price*($request->quantity[$key]);
+            $data[] = [ 
+                "product_id" => $request->product_id[$key],
+                "product_name"  => $getProductName->product_name,  
+                "quantity"  => $request->quantity[$key], 
+                "total"  => $totalPrice,  
 
-
-            $getProduct = Product::where('id',$request->product_id)->pluck('price')->first();
-            $totalPrice = $getProduct*($request->quantity);
-            if($totalPrice){
-                $request_data['amount'] =$totalPrice;
-            }
+            ];
+        } 
+ 
+           $request_data['product_id'] =json_encode($data);
+           $request_data['amount'] = 0;
+           $totalPrice=0;
+           foreach ($data as $key => $d) {
+            $getProduct = Product::where('id',$d['product_id'])->pluck('price')->first();
+            $totalPrice =  $totalPrice+$getProduct*($d['quantity']);
+           }
+           $request_data['amount'] =$totalPrice; 
             // Create new admin
             $data = Order::create($request_data);
             DB::commit();
@@ -120,8 +134,8 @@ class OrderController extends Controller
      */
     public function generateInvoice($data)
     {
-       $orders =  Order::where('phone_no',$data)->get();
-
+       $orders =  Order::with('product')->where('phone_no',$data)->first(); 
+        // dd($orders);
             // share data to view
             view()->share('invoiceExport',$orders);
             $pdf = PDF::loadView('myPDF', $orders->toArray());

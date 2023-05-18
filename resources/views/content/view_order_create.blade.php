@@ -51,7 +51,7 @@
                             <label for="validationCustom03">{{ __('Product') }}
                                 <span class="mandatory">*</span>
                             </label>
-                            <select name="product_id" class="form-control" id="validationCustom03">
+                            <select name="product_id[1]" class="form-control" id="validationCustom03">
                                 <option value=""> Select Product </option>
                                 @foreach ($products as $Product)
                                 <option value="{{$Product->id}}"  >{{$Product->product_name}}</option>
@@ -72,7 +72,7 @@
                             <label for="validationCustom04">{{ __('Quantity') }}
                             <span class="mandatory">*</span>
                             </label>
-                            <input autocomplete="off" type="text" value="{{old('quantity')}}" name="quantity" class="form-control" id="validationCustom04" placeholder="Quantity" required>
+                            <input autocomplete="off" type="text" value="{{old('quantity')}}" name="quantity[1]" class="form-control" id="validationCustom04" placeholder="Quantity" required>
                             <div class="invalid-feedback" >
                                 @if ($errors->has('quantity'))
                                 {{ $errors->first('quantity') }}
@@ -82,9 +82,31 @@
                         </div>
                     </div>
 
-                </div>
+                
 
 
+
+            <!--
+                    <div class="card"> -->
+
+                    <h4 class="form-group-tiltle mb-2"></h4>
+                           
+                                <div class="col-12" id="more-course">
+                                    <div id="TextBoxContainer">
+                                        <!--Textboxes will be added here -->
+                                    </div>
+                                </div>
+
+                                <div class="col-12 text-right">
+                                        <button type="button"
+                                            class="btn btn-primary  mb-1 waves-effect waves-light" id="add-courses"><i
+                                                class="fa fa-plus"></i>{{ __('Add') }} </button>
+                                </div>
+                           
+
+                    <!-- </div> -->
+
+                            
 
 
                 <div class="row w-75 mx-auto">
@@ -94,8 +116,8 @@
                     </div>
                  </div>
 
-
-            </div>
+                 </div>
+            </div> 
 
          </form>
 
@@ -113,6 +135,55 @@
         e.preventDefault();
         alert("test");
     });
+
+    var labtestparameter                     = {!! json_encode($products) !!};
+
+    var intTextBox = 1;
+    $(function () {
+        $("#add-courses").bind("click", function () {
+            intTextBox++;
+            var div = $("<div />");
+            div.html(GetDynamicTextBox(""));
+            $("#TextBoxContainer").append(div);
+
+
+        });
+
+        $("body").on("click", ".remove", function () { // to remove
+            $(this).parent().parent().remove();
+        });
+
+    });
+
+
+    function GetDynamicTextBox() {
+        var html = "<option  value=''>Select Product</option>";
+        labtestparameter.forEach(function(value, index) {
+
+           html = html + '<option  value='+value.id+'>'+value.product_name+'</option>';
+       });
+       return '<div class="row">\
+    <div class="col-lg-6">\
+        <label for="validationCustom01">Product  <span class="mandatory">*</span></label>\
+        <select name="product_id['+intTextBox+']" data-key="'+intTextBox+'" id="product_id-'+intTextBox+'" class="form-control select_course product_id" required>'+html+'</select>\
+        <div class="invalid-feedback" >@if ($errors->has("product_id['+intTextBox+']")){{ $errors->first("product_id['+intTextBox+']") }}@else {{ __("Product cannot be empty.")}}@endif</div>\
+    </div>\
+    <div class="col-lg-6">\
+        <label for="validationCustom01">Quantity <span class="mandatory">*</span></label>\
+        <input type="number" maxlength="100" name="quantity['+intTextBox+']" class="form-control quantity" id="quantity-'+intTextBox+'" placeholder="Quantity" required>\
+        <div class="invalid-feedback" >@if ($errors->has("quantity['+intTextBox+']")){{ $errors->first("quantity['+intTextBox+']") }}@else {{ __("Quantity cannot be empty.")}}@endif</div>\
+    </div>\
+    <div class="col-lg-1 ">\
+        <button type="button" id="remove_'+intTextBox+'" class="btn btn-sqaure btn-danger btn-sm remove-btn-course remove" style="">-</button>\
+    </div>\
+</div>';
+
+
+
+
+    }
+
+    
 </script>
 <script>
     $('document').ready(function () {

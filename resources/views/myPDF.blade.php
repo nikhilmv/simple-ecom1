@@ -2,13 +2,21 @@
 <html>
 <head>
 <style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: left;
+}
 </style>
 </head>
 <body>
 
-<h2>Investigations</h2>
+<h2>INVOICE</h2>
 
-<table>
+<!-- <table>
   <tr>
     <th>Sl#</th>
     <th>Test</th>
@@ -23,7 +31,31 @@
   @endforeach
 
 
+</table> -->
+
+
+<table style="width:100%">
+ 
+  <tr>
+    <th>Order ID:</th>
+    <td>{{$invoiceExport->id}}</td>
+  </tr>
+  <tr>
+    <th>Products:</th>
+    <td>
+
+   
+   @foreach ( json_decode($invoiceExport->product_id) as $key=> $value)
+      {{$value->product_id}}. {{$value->product_name}} X {{$value->quantity}} = {{$value->total}} 
+    @endforeach  
+    </td>
+  </tr>
+  <tr>
+    <th>Total:</th>
+    <td>{{$invoiceExport->amount}}</td>
+  </tr> 
 </table>
+
 
 </body>
 </html>

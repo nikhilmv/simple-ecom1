@@ -30,8 +30,8 @@ class OrderRequest extends FormRequest
         $request = [];
         $request['customer_name'] = 'required|max:250';
         $request['phone_no'] = 'required|numeric|digits:10';
-        $request['product_id'] = 'required|numeric';
-        $request['quantity'] = 'required|numeric';
+        $request['product_id'] = 'required';
+        $request['quantity'] = 'required';
         return $request;
     }
     /**
