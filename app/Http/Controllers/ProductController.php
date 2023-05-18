@@ -29,6 +29,10 @@ class ProductController extends Controller
             $q_user = Product::orderByDesc('created_at');
             return Datatables::of($q_user)
                     ->addIndexColumn()
+                    ->editColumn('category_id', function ($row) {
+
+                        return $row->category->category_name;
+                    })
                     ->addColumn('action', function($row){
 
                         $btn = '<div data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="btn btn-sm btn-icon btn-outline-success btn-circle mr-2 edit editUser"><i class=" fi-rr-edit"></i></div>';
