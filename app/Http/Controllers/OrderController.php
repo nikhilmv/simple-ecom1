@@ -143,7 +143,7 @@ class OrderController extends Controller
             $fileName =  time().'.'. 'pdf' ;
             $pdf->save($dir . '/' . $fileName);
             // download PDF file with download method
-            return $pdf->download('Investigations.pdf');
+            return $pdf->download('invoice.pdf');
     }
     /**
      * Delete a resource from storage.
