@@ -17,8 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->string('customer_name');
             $table->bigInteger('phone_no');
-            $table->integer('product_id');
-            $table->integer('quantity');
+            $table->text('product_id'); 
             $table->integer('amount');
             $table->timestamps();
         });
